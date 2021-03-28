@@ -120,7 +120,7 @@ func (c *userServiceClient) AddUserStreamBoth(ctx context.Context, opts ...grpc.
 
 type UserService_AddUserStreamBothClient interface {
 	Send(*User) error
-	CloseAndRecv() (*UserResultStream, error)
+	Recv() (*UserResultStream, error)
 	grpc.ClientStream
 }
 
@@ -132,10 +132,7 @@ func (x *userServiceAddUserStreamBothClient) Send(m *User) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *userServiceAddUserStreamBothClient) CloseAndRecv() (*UserResultStream, error) {
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
+func (x *userServiceAddUserStreamBothClient) Recv() (*UserResultStream, error) {
 	m := new(UserResultStream)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -255,7 +252,7 @@ func _UserService_AddUserStreamBoth_Handler(srv interface{}, stream grpc.ServerS
 }
 
 type UserService_AddUserStreamBothServer interface {
-	SendAndClose(*UserResultStream) error
+	Send(*UserResultStream) error
 	Recv() (*User, error)
 	grpc.ServerStream
 }
@@ -264,7 +261,7 @@ type userServiceAddUserStreamBothServer struct {
 	grpc.ServerStream
 }
 
-func (x *userServiceAddUserStreamBothServer) SendAndClose(m *UserResultStream) error {
+func (x *userServiceAddUserStreamBothServer) Send(m *UserResultStream) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -302,6 +299,7 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "AddUserStreamBoth",
 			Handler:       _UserService_AddUserStreamBoth_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

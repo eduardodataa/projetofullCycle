@@ -26,5 +26,5 @@ service UserService {
     rpc AddUsers (stream User) returns (Users);
 
     //stream bidirecional
-    rpc AddUserStreamBoth (stream User) returns (UserResultStream);
+    rpc AddUserStreamBoth (stream User) returns (stream UserResultStream);
 }

@@ -103,7 +103,9 @@ func (*UserService) AddUserStreamBoth(stream pb.UserService_AddUserStreamBothSer
 			log.Fatalf("Erro receber stream do cliente: %v", err)
 		}
 
-		err = stream.SendAndClose(&pb.UserResultStream{
+		err = stream.Send(&pb.UserResultStream{
+
+
 			Status: "Added",
 			User: req,
 		})
